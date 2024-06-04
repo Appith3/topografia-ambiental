@@ -5,11 +5,22 @@ import Topbar from '../components/Topbar'
 import InputSelect from '../components/InputSelect'
 import { Button, TextInput } from 'react-native-paper'
 
+import usePlantIdGenerator from '../Hooks/usePlantIdGenerator'
+
 const VegetationFormScreen = ({navigation}) => {
-	const [selectedClassification, setSelectedClassification] = useState()
-	const [height, setHeight] = useState("");
-	const [trunkDiameter, setTrunkDiameter] = useState("");
-	const [cupDiameter, setCupDiameter] = useState("");
+	const { generatePlantId } = usePlantIdGenerator();
+
+	const [plant, setPlant] = useState({
+		id: '',
+		classification: '',
+		height: '',
+		trunkDiameter: '',
+		cupDiameter: ''
+	})
+
+	const handleSavePress = () => {
+		console.log(plant)
+	}
 
 	return (
 		<View style={styles.container}>
@@ -35,32 +46,45 @@ const VegetationFormScreen = ({navigation}) => {
 						},
 						{
 							label: 'Suculenta',
-							value: 'suculenta'
+							value: 'suculenta/cactácea'
 						},
 						{
 							label: 'Cactácea',
-							value: 'cactácea'
+							value: 'suculenta/cactácea'
 						},
 					]}
-					selectedValue={selectedClassification}
-					onValueChange={(itemValue) => setSelectedClassification(itemValue)}
+					selectedValue={plant.classification}
+					onValueChange={(classification) => setPlant({
+						...plant,
+						classification,
+						id: generatePlantId(classification)
+					})}
 				/>
 				<TextInput
 					label="Altura"
-					value={height}
-					onChangeText={height => setHeight(height)}
+					value={plant.height}
+					onChangeText={height => setPlant({
+						...plant,
+						height
+					})}
 					keyboardType='numeric'
 				/>
 				<TextInput
 					label="Diámetro del tronco"
-					value={trunkDiameter}
-					onChangeText={trunkDiameter => setTrunkDiameter(trunkDiameter)}
+					value={plant.trunkDiameter}
+					onChangeText={trunkDiameter => setPlant({
+						...plant,
+						trunkDiameter
+					})}
 					keyboardType='numeric'
 				/>
 				<TextInput
 					label="Diámetro de la copa"
-					value={cupDiameter}
-					onChangeText={cupDiameter => setCupDiameter(cupDiameter)}
+					value={plant.cupDiameter}
+					onChangeText={cupDiameter => setPlant({
+						...plant,
+						cupDiameter
+					})}
 					keyboardType='numeric'
 					/>
 
@@ -68,7 +92,7 @@ const VegetationFormScreen = ({navigation}) => {
 					<Button mode='outlined'>
 						Terminar
 					</Button>
-					<Button mode='contained'>
+					<Button mode='contained' onPress={handleSavePress}>
 						Guardar elemento
 					</Button>
 				</View>
