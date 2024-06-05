@@ -6,11 +6,13 @@ import InputSelect from '../components/InputSelect'
 import { Button, TextInput } from 'react-native-paper'
 
 import usePlantIdGenerator from '../Hooks/usePlantIdGenerator'
+import useDB from '../Hooks/useDB'
 
 const VegetationFormScreen = ({navigation}) => {
 	const { generatePlantId } = usePlantIdGenerator();
+	const { createSpecimen } = useDB()
 
-	const [plant, setPlant] = useState({
+	const [specimen, setSpecimen] = useState({
 		id: '',
 		classification: '',
 		height: '',
@@ -18,8 +20,19 @@ const VegetationFormScreen = ({navigation}) => {
 		cupDiameter: ''
 	})
 
+	const clearForm = () => {
+		setSpecimen({
+			id: '',
+			classification: '',
+			height: '',
+			trunkDiameter: '',
+			cupDiameter: ''
+		})
+	}
+
 	const handleSavePress = () => {
-		console.log(plant)
+		createSpecimen(specimen)
+		clearForm()
 	}
 
 	return (
@@ -53,36 +66,36 @@ const VegetationFormScreen = ({navigation}) => {
 							value: 'suculenta/cactácea'
 						},
 					]}
-					selectedValue={plant.classification}
-					onValueChange={(classification) => setPlant({
-						...plant,
+					selectedValue={specimen.classification}
+					onValueChange={(classification) => setSpecimen({
+						...specimen,
 						classification,
 						id: generatePlantId(classification)
 					})}
 				/>
 				<TextInput
 					label="Altura"
-					value={plant.height}
-					onChangeText={height => setPlant({
-						...plant,
+					value={specimen.height}
+					onChangeText={height => setSpecimen({
+						...specimen,
 						height
 					})}
 					keyboardType='numeric'
 				/>
 				<TextInput
 					label="Diámetro del tronco"
-					value={plant.trunkDiameter}
-					onChangeText={trunkDiameter => setPlant({
-						...plant,
+					value={specimen.trunkDiameter}
+					onChangeText={trunkDiameter => setSpecimen({
+						...specimen,
 						trunkDiameter
 					})}
 					keyboardType='numeric'
 				/>
 				<TextInput
 					label="Diámetro de la copa"
-					value={plant.cupDiameter}
-					onChangeText={cupDiameter => setPlant({
-						...plant,
+					value={specimen.cupDiameter}
+					onChangeText={cupDiameter => setSpecimen({
+						...specimen,
 						cupDiameter
 					})}
 					keyboardType='numeric'

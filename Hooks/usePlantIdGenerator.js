@@ -9,7 +9,6 @@ const usePlantIdGenerator = () => {
   });
 
   const generatePlantId = (classification) => {
-		console.log('generatePlantId: ', classification);
     const prefix = getPrefix(classification);
     const sequenceNumber = sequenceNumbers[classification]++;
     const paddedSequenceNumber = String(sequenceNumber).padStart(2, '0');

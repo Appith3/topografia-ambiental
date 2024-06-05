@@ -1,71 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, SafeAreaView, FlatList, View } from 'react-native'
-import { AnimatedFAB, Avatar, List, Text } from 'react-native-paper'
+import { ActivityIndicator, AnimatedFAB, Avatar, List, Text } from 'react-native-paper'
 import Topbar from '../components/Topbar'
-
-const data = [
-  {
-    "id": "A-01",
-    "classification": "árbol",
-    "height": "10",
-    "trunk_diameter": "2",
-    "cup_diameter": "5"
-  },
-  {
-    "id": "B-01",
-    "classification": "arbusto",
-    "height": "3",
-    "cup_diameter": "1"
-  },
-  {
-    "id": "P-01",
-    "classification": "palma",
-    "height": "8",
-    "trunk_diameter": "1.5",
-    "cup_diameter": "4"
-  },
-  {
-    "id": "S-01",
-    "classification": "suculenta",
-    "height": "0.5"
-  },
-  {
-    "id": "S-02",
-    "classification": "cactácea",
-    "height": "0.8"
-  },
-  {
-    "id": "A-02",
-    "classification": "árbol",
-    "height": "12",
-    "trunk_diameter": "3.5",
-    "cup_diameter": "7"
-  },
-  {
-    "id": "B-02",
-    "classification": "arbusto",
-    "height": "4",
-    "cup_diameter": "1.5"
-  },
-  {
-    "id": "P-02",
-    "classification": "palma",
-    "height": "7",
-    "trunk_diameter": "1",
-    "cup_diameter": "3"
-  },
-  {
-    "id": "S-03",
-    "classification": "suculenta",
-    "height": "0.3"
-  },
-  {
-    "id": "S-04",
-    "classification": "cactácea",
-    "height": "1.2"
-  }
-]
+import useDB from '../Hooks/useDB'
 
 const VegetationItem = ({id, classification, height, trunk_diameter = '-', cup_diameter = '-'}) => (
   <List.Item
@@ -94,6 +32,13 @@ const VegetationItem = ({id, classification, height, trunk_diameter = '-', cup_d
 
 const VegetationListScreen = ({navigation}) => {
   const [isExtended, setIsExtended] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const { getAllSpecimens, specimens, loading } = useDB();
+  
+  useEffect(() => {
+    getAllSpecimens()
+  }, [])
 
   const onScroll = ({ nativeEvent }) => {
 		const currentScrollPosition =
@@ -101,6 +46,14 @@ const VegetationListScreen = ({navigation}) => {
 
 		setIsExtended(currentScrollPosition <= 0);
 	};
+
+  if (loading) {
+		return (
+			<View style={styles.loadingContainer}>
+				<ActivityIndicator size={'large'} />
+			</View>
+		);
+	}
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -110,13 +63,13 @@ const VegetationListScreen = ({navigation}) => {
           [
             {
               icon: 'export-variant',
-              onPress: () => { console.log('export data') },
+              onPress: () => { console.info('export data') },
             }
           ]
         }
       />
       <FlatList
-        data={data}
+        data={specimens}
         renderItem={({item}) => (
         <VegetationItem 
           id={item.id}
@@ -127,6 +80,8 @@ const VegetationListScreen = ({navigation}) => {
         />)}
         keyExtractor={item => item.id}
         onScroll={onScroll}
+        refreshing={refreshing}
+        onRefresh={getAllSpecimens}
       />
       <AnimatedFAB
 					icon={'plus'}
@@ -144,6 +99,12 @@ const VegetationListScreen = ({navigation}) => {
 export default VegetationListScreen
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+		flex: 1,
+		paddingTop: StatusBar.currentHeight,
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
   container: {
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
