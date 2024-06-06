@@ -6,7 +6,7 @@ import { ActivityIndicator, AnimatedFAB, Avatar, List, Text } from 'react-native
 import Topbar from '../components/Topbar'
 import useDB from '../Hooks/useDB'
 
-const VegetationItem = ({id, classification, height, trunkDiameter = '-', cupDiameter = '-'}) => (
+const VegetationItem = ({id, classification, height, trunkDiameter , cupDiameter }) => (
   <List.Item
     left={() => <Avatar.Text label={id} labelStyle={{fontSize: 18}}/>}
     style={styles.item}
@@ -17,14 +17,22 @@ const VegetationItem = ({id, classification, height, trunkDiameter = '-', cupDia
           <Text>{height} m</Text>
           <List.Icon icon="ruler" />
         </View>
-        <View style={{flexDirection: 'row'}}>
-          <Text>{trunkDiameter} cm</Text>
-          <List.Icon icon="tree" />
-        </View>
-        <View style={{flexDirection: 'row'}}>
-          <Text>{cupDiameter} m</Text>
-          <List.Icon icon="grass" />
-        </View>
+        {
+          trunkDiameter
+            ? <View style={{flexDirection: 'row'}}>
+                <Text>{trunkDiameter} cm</Text>
+                <List.Icon icon="tree" />
+              </View>
+            : null
+        }
+        {
+          cupDiameter
+            ? <View style={{flexDirection: 'row'}}>
+                <Text>{cupDiameter} m</Text>
+                <List.Icon icon="grass" />
+              </View>
+            : null
+        }
       </View>
     )}
     titleStyle={{fontSize: 24}}
@@ -119,7 +127,7 @@ const styles = StyleSheet.create({
   },
   itemDescription: {
     flexDirection: 'row',
-    gap: 18
+    gap: 8
   },
   fabStyle: {
 		bottom: 16,
