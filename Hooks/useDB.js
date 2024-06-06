@@ -20,10 +20,6 @@ const useDB = () => {
 				trunk_diameter REAL,
 				cup_diameter REAL
 			);
-			CREATE TABLE IF NOT EXISTS Specimen_id_sequences (
-				classification TEXT PRIMARY KEY,
-				sequence_number INTEGER NOT NULL DEFAULT 1
-			);
 		`)
 	}
 		
@@ -68,10 +64,6 @@ const useDB = () => {
 		try {
 			setLoading(true); 
 	
-			const getSpecimensStmt = await db.prepareAsync(
-				'SELECT * FROM Specimens s LEFT JOIN Specimens_Detail sd ON s.id = sd.id_specimen;'
-			);
-	
 			const result = await getSpecimensStmt.executeAsync();
 			const allRows = await result.getAllAsync();
 	
@@ -89,14 +81,6 @@ const useDB = () => {
 		} finally {
 			await getSpecimensStmt.finalizeAsync(); 
 		}
-	}
-
-	const fetchSequenceNumbers = async () => {
-		// TODO: Implement function
-	}
-
-	const updateSequenceNumber  = async () => {
-		// TODO: Implement function
 	}
 
 	useEffect(() => {
