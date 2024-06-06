@@ -34,8 +34,7 @@ const useDB = () => {
 		);
 
 		try {
-			console.log(id, classification, height)
-			const result = await insertSpecimenStmt.executeAsync({$id: id, $classification: classification, $height: height})
+			await insertSpecimenStmt.executeAsync({$id: id, $classification: classification, $height: height})
 
 			if(trunkDiameter && cupDiameter) {
 				try{
@@ -45,7 +44,6 @@ const useDB = () => {
 				}
 			}
 
-			console.info('Specimen created successfully');
 		} catch (error) {
 			if (error.message.includes('database is locked')) {
         console.error("Database locked");
