@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, SafeAreaView, FlatList, View } from 'react-native'
 import { ActivityIndicator, AnimatedFAB, Avatar, List, Text } from 'react-native-paper'
+import { useStore } from 'zustand';
 
+import { useVegetationStore } from '../store/useVegetationStore';
 import Topbar from '../components/Topbar'
 import useDB from '../Hooks/useDB'
 
@@ -43,11 +45,20 @@ const VegetationListScreen = ({navigation}) => {
   const [isExtended, setIsExtended] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
-  const { getAllSpecimens, specimens, loading } = useDB();
+  const { getAllSpecimens, loading } = useDB();
+  const { specimens } = useStore(useVegetationStore);
+
+  // FIXME: prevent re-render, useEffect is executing until specimens.length not change
+  const memoizedGetAllSpecimens = useMemo(() => async () => {
+    getAllSpecimens()
+
+    return specimensData;
+  }, []);
   
   useEffect(() => {
-    getAllSpecimens()
-  }, [])
+    console.log('specimens: ', specimens);
+    memoizedGetAllSpecimens()
+  }, [specimens.length])
 
   const onScroll = ({ nativeEvent }) => {
 		const currentScrollPosition =

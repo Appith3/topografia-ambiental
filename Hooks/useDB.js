@@ -1,11 +1,15 @@
 import { useEffect, useState} from 'react'
 import { useSQLiteContext } from 'expo-sqlite';
+import { useStore } from 'zustand';
+
+import { useVegetationStore } from '../store/useVegetationStore';
 
 const useDB = () => {
-	const [specimens, setSpecimens] = useState([])
 	const [loading, setLoading] = useState(false)
 
 	const db = useSQLiteContext();
+
+	const { addSpecimen } = useStore(useVegetationStore);
 
 	const initDB = async () => {
 		await db.execAsync(`
@@ -44,13 +48,15 @@ const useDB = () => {
 				}
 			}
 
+			addSpecimen(specimen)
+
 		} catch (error) {
 			if (error.message.includes('database is locked')) {
         console.error("Database locked");
       } else {
         throw error; 
       }
-		} 
+		}
 		finally {
 			await insertSpecimenStmt.finalizeAsync()
 		}
@@ -67,13 +73,9 @@ const useDB = () => {
 			const result = await getSpecimensStmt.executeAsync();
 			const allRows = await result.getAllAsync();
 	
-			setSpecimens(allRows.map((row) => ({
-				id: row.id,
-				classification: row.classification,
-				height: row.height,
-				trunk_diameter: row.trunk_diameter,
-				cup_diameter: row.cup_diameter,
-			})));
+			for(specimen of allRows) {
+				addSpecimen(specimen)
+			}
 	
 			setLoading(false); 
 		} catch (error) {
@@ -90,7 +92,6 @@ const useDB = () => {
 	return {
 		createSpecimen,
 		getAllSpecimens,
-		specimens,
 		loading
 	}
 }
