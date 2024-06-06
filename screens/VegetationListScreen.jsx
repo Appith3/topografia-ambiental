@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, SafeAreaView, FlatList, View } from 'react-native'
 import { ActivityIndicator, AnimatedFAB, Avatar, List, Text } from 'react-native-paper'
+
 import Topbar from '../components/Topbar'
 import useDB from '../Hooks/useDB'
 
-const VegetationItem = ({id, classification, height, trunk_diameter = '-', cup_diameter = '-'}) => (
+const VegetationItem = ({id, classification, height, trunkDiameter = '-', cupDiameter = '-'}) => (
   <List.Item
     left={() => <Avatar.Text label={id} labelStyle={{fontSize: 18}}/>}
     style={styles.item}
@@ -17,11 +18,11 @@ const VegetationItem = ({id, classification, height, trunk_diameter = '-', cup_d
           <List.Icon icon="ruler" />
         </View>
         <View style={{flexDirection: 'row'}}>
-          <Text>{trunk_diameter} cm</Text>
+          <Text>{trunkDiameter} cm</Text>
           <List.Icon icon="tree" />
         </View>
         <View style={{flexDirection: 'row'}}>
-          <Text>{cup_diameter} m</Text>
+          <Text>{cupDiameter} m</Text>
           <List.Icon icon="grass" />
         </View>
       </View>
@@ -75,8 +76,8 @@ const VegetationListScreen = ({navigation}) => {
           id={item.id}
           classification={item.classification} 
           height={item.height}
-          trunk_diameter={item.trunk_diameter}
-          cup_diameter={item.cup_diameter}
+          trunkDiameter={item.trunk_diameter}
+          cupDiameter={item.cup_diameter}
         />)}
         keyExtractor={item => item.id}
         onScroll={onScroll}

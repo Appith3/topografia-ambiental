@@ -67,11 +67,15 @@ const VegetationFormScreen = ({navigation}) => {
 						},
 					]}
 					selectedValue={specimen.classification}
-					onValueChange={(classification) => setSpecimen({
-						...specimen,
-						classification,
-						id: generatePlantId(classification)
-					})}
+					onValueChange={(classification) => {
+						let id = generatePlantId(classification)
+						console.log('id: ', id._j);
+						setSpecimen({
+							...specimen,
+							classification,
+							id: id._j
+						})
+					}}
 				/>
 				<TextInput
 					label="Altura"

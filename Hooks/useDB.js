@@ -1,7 +1,6 @@
 import { useEffect, useState} from 'react'
 import { useSQLiteContext } from 'expo-sqlite';
 
-
 const useDB = () => {
 	const [specimens, setSpecimens] = useState([])
 	const [loading, setLoading] = useState(false)
@@ -24,8 +23,7 @@ const useDB = () => {
 	}
 		
 	const createSpecimen = async (specimen) => {
-		console.log('createSpecimen: ', specimen);
-		const {id, classification, height, trunk_diameter, cup_diameter} = specimen
+		const {id, classification, height, trunkDiameter, cupDiameter} = specimen
 
 		const insertSpecimenStmt = await db.prepareAsync(
 			'INSERT INTO Specimens (id, classification, height) VALUES ($id, $classification, $height);'
@@ -36,12 +34,12 @@ const useDB = () => {
 		);
 
 		try {
+			console.log(id, classification, height)
 			const result = await insertSpecimenStmt.executeAsync({$id: id, $classification: classification, $height: height})
-			console.info('result: ', result);
 
-			if(trunk_diameter && cup_diameter) {
+			if(trunkDiameter && cupDiameter) {
 				try{
-					await insertSpecimenDetailStmt.executeAsync({$id_specimen: result.insertId, $trunk_diameter: trunk_diameter, $cup_diameter: cup_diameter})
+					await insertSpecimenDetailStmt.executeAsync({$id_specimen: id, $trunk_diameter: trunkDiameter, $cup_diameter: cupDiameter})
 				} finally {
 					await insertSpecimenDetailStmt.finalizeAsync()
 				}
@@ -49,7 +47,11 @@ const useDB = () => {
 
 			console.info('Specimen created successfully');
 		} catch (error) {
-			console.error('Error creating specimen:', error);
+			if (error.message.includes('database is locked')) {
+        console.error("Database locked");
+      } else {
+        throw error; 
+      }
 		} 
 		finally {
 			await insertSpecimenStmt.finalizeAsync()
