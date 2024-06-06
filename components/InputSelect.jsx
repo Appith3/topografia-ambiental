@@ -20,7 +20,7 @@ const InputSelect = ( props ) => {
 				mode='dropdown'
 			>
 				{
-					options.map((option) => <Picker.Item label={option.label} value={option.value} style={styles.pickerOption}/>)
+					options.map((option, index) => <Picker.Item key={index} label={option.label} value={option.value} style={styles.pickerOption}/>)
 				}
 			</Picker>
 		</View>

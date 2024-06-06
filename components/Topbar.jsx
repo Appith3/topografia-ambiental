@@ -18,7 +18,7 @@ const Topbar = (props) => {
 			<Appbar.Content title={title}/>
 			{
 				whitActions
-					? whitActions.map((action) => <Appbar.Action icon={action.icon} onPress={action.onPress}/>)
+					? whitActions.map((action, index) => <Appbar.Action key={index} icon={action.icon} onPress={action.onPress}/>)
 					: null
 			}
 		</Appbar.Header>
