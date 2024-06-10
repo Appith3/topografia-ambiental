@@ -39,14 +39,14 @@ const VegetationListScreen = ({navigation}) => {
 		<SafeAreaView style={styles.container}>
       <Topbar 
         title='Lista de ejemplares'
-        whitActions={
-          [
-            {
-              icon: 'export-variant',
-              onPress: () => { console.info('export data') },
-            }
-          ]
-        }
+        // // whitActions={
+        // //   [
+        // //     {
+        // //       icon: 'export-variant',
+        // //       onPress: () => { console.info('export data') },
+        // //     }
+        // //   ]
+        // // }
       />
       <FlatList
         data={specimens}
