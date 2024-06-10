@@ -1,4 +1,4 @@
-import { Appbar } from 'react-native-paper';
+import { Appbar } from 'react-native-paper'
 
 const Topbar = (props) => {
 	const {
@@ -6,7 +6,7 @@ const Topbar = (props) => {
 		whitBackAction = false,
 		onBack,
 		whitActions
-	} = props;
+	} = props
 	
 	return (
 		<Appbar.Header elevated>
@@ -22,7 +22,7 @@ const Topbar = (props) => {
 					: null
 			}
 		</Appbar.Header>
-	);
-};
+	)
+}
 
-export default Topbar;
+export default Topbar

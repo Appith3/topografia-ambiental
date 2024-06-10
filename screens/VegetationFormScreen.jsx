@@ -1,15 +1,16 @@
 import { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
-import Topbar from '../components/Topbar'
-import InputSelect from '../components/InputSelect'
 import { Button, TextInput } from 'react-native-paper'
 
-import usePlantIdGenerator from '../Hooks/usePlantIdGenerator'
+import Topbar from '../components/Topbar'
+import InputSelect from '../components/InputSelect'
+
+//// import usePlantIdGenerator from '../Hooks/usePlantIdGenerator'
 import useDB from '../Hooks/useDB'
 
 const VegetationFormScreen = ({navigation}) => {
-	const { generatePlantId } = usePlantIdGenerator();
+	//// const { generatePlantId } = usePlantIdGenerator()
 	const { createSpecimen } = useDB()
 
 	const [specimen, setSpecimen] = useState({
@@ -39,6 +40,15 @@ const VegetationFormScreen = ({navigation}) => {
 		<View style={styles.container}>
 			<Topbar title='Agregar ejemplar' whitBackAction onBack={() => {navigation.goBack()}}/>
 			<View style={styles.form}>
+				<TextInput
+					label="ID de colectora"
+					value={specimen.id}
+					onChangeText={id => setSpecimen({
+						...specimen,
+						id
+					})}
+					keyboardType='numeric'
+				/>
 				<InputSelect 
 					options={[
 						{
@@ -59,20 +69,20 @@ const VegetationFormScreen = ({navigation}) => {
 						},
 						{
 							label: 'Suculenta',
-							value: 'suculenta/cactácea'
+							value: 'suculenta'
 						},
 						{
 							label: 'Cactácea',
-							value: 'suculenta/cactácea'
+							value: 'cactácea'
 						},
 					]}
 					selectedValue={specimen.classification}
 					onValueChange={(classification) => {
-						let id = generatePlantId(classification)
+						//// let id = generatePlantId(classification)
 						setSpecimen({
 							...specimen,
 							classification,
-							id: id._j
+							//// id: id._j
 						})
 					}}
 				/>
@@ -86,6 +96,15 @@ const VegetationFormScreen = ({navigation}) => {
 					keyboardType='numeric'
 				/>
 				<TextInput
+					label="Diámetro de la copa"
+					value={specimen.cup_diameter}
+					onChangeText={cup_diameter => setSpecimen({
+						...specimen,
+						cup_diameter
+					})}
+					keyboardType='numeric'
+				/>
+				<TextInput
 					label="Diámetro del tronco"
 					value={specimen.trunk_diameter}
 					onChangeText={trunk_diameter => setSpecimen({
@@ -94,22 +113,10 @@ const VegetationFormScreen = ({navigation}) => {
 					})}
 					keyboardType='numeric'
 				/>
-				<TextInput
-					label="Diámetro de la copa"
-					value={specimen.cup_diameter}
-					onChangeText={cup_diameter => setSpecimen({
-						...specimen,
-						cup_diameter
-					})}
-					keyboardType='numeric'
-					/>
 
 				<View style={styles.formControls}>
-					<Button mode='outlined'>
-						Terminar
-					</Button>
 					<Button mode='contained' onPress={handleSavePress}>
-						Guardar elemento
+						Guardar ejemplar
 					</Button>
 				</View>
 			</View>

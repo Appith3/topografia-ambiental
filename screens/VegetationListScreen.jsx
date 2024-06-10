@@ -2,19 +2,19 @@ import { useEffect, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, SafeAreaView, FlatList, View } from 'react-native'
 import { ActivityIndicator, AnimatedFAB } from 'react-native-paper'
-import { useStore } from 'zustand';
+import { useStore } from 'zustand'
 
 import Topbar from '../components/Topbar'
-import VegetationItem from '../components/VegetationItem';
+import VegetationItem from '../components/VegetationItem'
 import useDB from '../Hooks/useDB'
-import { useVegetationStore } from '../store/useVegetationStore';
+import { useVegetationStore } from '../store/useVegetationStore'
 
 const VegetationListScreen = ({navigation}) => {
-  const [isExtended, setIsExtended] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
+  const [isExtended, setIsExtended] = useState(true)
+  const [refreshing, setRefreshing] = useState(false)
 
-  const { getAllSpecimens, loading } = useDB();
-  const { specimens } = useStore(useVegetationStore);
+  const { getAllSpecimens, loading } = useDB()
+  const { specimens } = useStore(useVegetationStore)
 
   useEffect(() => {
     getAllSpecimens()
@@ -22,17 +22,17 @@ const VegetationListScreen = ({navigation}) => {
 
   const onScroll = ({ nativeEvent }) => {
 		const currentScrollPosition =
-			Math.floor(nativeEvent?.contentOffset?.y) ?? 0;
+			Math.floor(nativeEvent?.contentOffset?.y) ?? 0
 
-		setIsExtended(currentScrollPosition <= 0);
-	};
+		setIsExtended(currentScrollPosition <= 0)
+	}
 
   if (loading) {
 		return (
 			<View style={styles.loadingContainer}>
 				<ActivityIndicator size={'large'} />
 			</View>
-		);
+		)
 	}
 
 	return (
@@ -57,6 +57,7 @@ const VegetationListScreen = ({navigation}) => {
           height={item.height}
           trunk_diameter={item.trunk_diameter}
           cup_diameter={item.cup_diameter}
+          onPress={() => {navigation.navigate('VegetationDetail', {id: item.id})}}
         />)}
         keyExtractor={item => item.id}
         onScroll={onScroll}

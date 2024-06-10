@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native'
-import { Text } from 'react-native-paper';
-import {Picker} from '@react-native-picker/picker';
+import { Text } from 'react-native-paper'
+import {Picker} from '@react-native-picker/picker'
 
 const InputSelect = ( props ) => {
 	const {

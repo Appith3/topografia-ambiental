@@ -1,11 +1,12 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { SQLiteProvider } from 'expo-sqlite';
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { SQLiteProvider } from 'expo-sqlite'
 
-import VegetationListScreen from './screens/VegetationListScreen';
-import VegetationFormScreen from './screens/VegetationFormScreen';
+import VegetationListScreen from './screens/VegetationListScreen'
+import VegetationFormScreen from './screens/VegetationFormScreen'
+import VegetationDetailScreen from './screens/VegetationDetailScreen'
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator()
 
 export default function App() {
   return (
@@ -22,9 +23,14 @@ export default function App() {
             component={VegetationFormScreen}
             options={{headerShown: false}}
           />
+          <Stack.Screen 
+            name="VegetationDetail" 
+            component={VegetationDetailScreen}
+            options={{headerShown: false}}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </SQLiteProvider>
-  );
+  )
 }
 

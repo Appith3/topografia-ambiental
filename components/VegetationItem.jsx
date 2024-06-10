@@ -2,7 +2,7 @@ import { View, StyleSheet } from 'react-native'
 import React from 'react'
 import { Avatar, List, Text } from 'react-native-paper'
 
-const VegetationItem = ({id, classification, height, trunk_diameter , cup_diameter }) => (
+const VegetationItem = ({id, classification, height, trunk_diameter , cup_diameter, onPress }) => (
   <List.Item
     left={() => <Avatar.Text label={id} labelStyle={{fontSize: 18}}/>}
     style={styles.item}
@@ -32,6 +32,7 @@ const VegetationItem = ({id, classification, height, trunk_diameter , cup_diamet
       </View>
     )}
     titleStyle={{fontSize: 24}}
+    onPress={onPress}
   />
 )
 
