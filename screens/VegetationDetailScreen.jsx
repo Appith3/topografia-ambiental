@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
-import { Button, TextInput } from 'react-native-paper'
+import { Button, Snackbar, Text, TextInput } from 'react-native-paper'
 
 import Topbar from '../components/Topbar'
 import InputSelect from '../components/InputSelect'
@@ -31,6 +31,12 @@ const VegetationDetailScreen = ( props ) => {
 		cup_diameter: ''
 	})
 
+	const [visible, setVisible] = React.useState(false);
+
+  const onToggleSnackBar = () => setVisible(!visible);
+
+  const onDismissSnackBar = () => setVisible(false);
+
 	const loadSpecimen = async (specimenId) => {
     const fetchedSpecimen = await getSpecimenById(specimenId)
 		console.log('fetchedSpecimen: ', fetchedSpecimen);
@@ -46,6 +52,8 @@ const VegetationDetailScreen = ( props ) => {
     if (specimen.cup_diameter !== '') {
       await updateSpecimenCupDiameter(id, parseFloat(specimen.cup_diameter))
     }
+
+		onToggleSnackBar()
   }
 
 	useEffect(() => {
@@ -125,6 +133,15 @@ const VegetationDetailScreen = ( props ) => {
 					</Button>
 				</View>
 			</View>
+			<Snackbar
+        visible={visible}
+        onDismiss={onDismissSnackBar}
+        action={{
+          label: 'cerrar',
+          onPress: () => {onToggleSnackBar()},
+        }}>
+					<Text style={{color: "#FAFAFA"}}>Ejemplar {id} actualizado</Text>
+      </Snackbar>
 		</View>
 	)
 }
