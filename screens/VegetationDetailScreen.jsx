@@ -31,15 +31,14 @@ const VegetationDetailScreen = ( props ) => {
 		cup_diameter: ''
 	})
 
-	const [visible, setVisible] = React.useState(false);
+	const [visible, setVisible] = React.useState(false)
 
-  const onToggleSnackBar = () => setVisible(!visible);
+  const onToggleSnackBar = () => setVisible(!visible)
 
-  const onDismissSnackBar = () => setVisible(false);
+  const onDismissSnackBar = () => setVisible(false)
 
 	const loadSpecimen = async (specimenId) => {
     const fetchedSpecimen = await getSpecimenById(specimenId)
-		console.log('fetchedSpecimen: ', fetchedSpecimen);
     setSpecimen(fetchedSpecimen)
   }
 
