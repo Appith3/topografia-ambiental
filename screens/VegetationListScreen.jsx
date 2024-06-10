@@ -16,8 +16,6 @@ const VegetationListScreen = ({navigation}) => {
   const { getAllSpecimens, loading } = useDB();
   const { specimens } = useStore(useVegetationStore);
 
-  // FIXME: prevent re-render, useEffect is executing until specimens.length not change
-  
   useEffect(() => {
     getAllSpecimens()
   }, [])

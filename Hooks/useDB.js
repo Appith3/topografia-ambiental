@@ -40,7 +40,7 @@ const useDB = () => {
 		try {
 			await insertSpecimenStmt.executeAsync({$id: id, $classification: classification, $height: height})
 
-			if(trunkDiameter && cupDiameter) {
+			if(trunkDiameter || cupDiameter) {
 				try{
 					await insertSpecimenDetailStmt.executeAsync({$id_specimen: id, $trunk_diameter: trunkDiameter, $cup_diameter: cupDiameter})
 				} finally {
