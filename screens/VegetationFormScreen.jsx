@@ -6,11 +6,11 @@ import { Button, TextInput } from 'react-native-paper'
 import Topbar from '../components/Topbar'
 import InputSelect from '../components/InputSelect'
 
-//// import usePlantIdGenerator from '../Hooks/usePlantIdGenerator'
+ import usePlantIdGenerator from '../Hooks/usePlantIdGenerator'
 import useDB from '../Hooks/useDB'
 
 const VegetationFormScreen = ({navigation}) => {
-	//// const { generatePlantId } = usePlantIdGenerator()
+	 const { generatePlantId } = usePlantIdGenerator()
 	const { createSpecimen } = useDB()
 
 	const [specimen, setSpecimen] = useState({
@@ -78,11 +78,11 @@ const VegetationFormScreen = ({navigation}) => {
 					]}
 					selectedValue={specimen.classification}
 					onValueChange={(classification) => {
-						//// let id = generatePlantId(classification)
+						 let id = generatePlantId(classification)
 						setSpecimen({
 							...specimen,
 							classification,
-							//// id: id._j
+							 id: id._j
 						})
 					}}
 				/>

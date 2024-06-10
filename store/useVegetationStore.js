@@ -8,5 +8,10 @@ export const useVegetationStore = create((set) => ({
       specimens: [...state.specimens, newSpecimenData],
     }))
   },
+  deleteSpecimen: (specimenId) => {
+    set((state) => ({
+			specimens: state.specimens.filter((specimen) => specimen.id !== specimenId),
+		}))
+  }
 	
 }))

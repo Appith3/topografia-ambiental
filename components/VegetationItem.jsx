@@ -1,8 +1,8 @@
 import { View, StyleSheet } from 'react-native'
 import React from 'react'
-import { Avatar, List, Text } from 'react-native-paper'
+import { Avatar, IconButton, List, MD3Colors, Text } from 'react-native-paper'
 
-const VegetationItem = ({id, classification, height, trunk_diameter , cup_diameter, onPress }) => (
+const VegetationItem = ({id, classification, height, trunk_diameter, cup_diameter, onPress, onDeleteItem }) => (
   <List.Item
     left={() => <Avatar.Text label={id} labelStyle={{fontSize: 18}}/>}
     style={styles.item}
@@ -33,6 +33,12 @@ const VegetationItem = ({id, classification, height, trunk_diameter , cup_diamet
     )}
     titleStyle={{fontSize: 24}}
     onPress={onPress}
+    right={() => <IconButton
+      icon="delete"
+      iconColor={MD3Colors.error50}
+      size={30}
+      onPress={onDeleteItem}
+    />}
   />
 )
 

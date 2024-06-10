@@ -13,7 +13,11 @@ const VegetationListScreen = ({navigation}) => {
   const [isExtended, setIsExtended] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
 
-  const { getAllSpecimens, loading } = useDB()
+  const { 
+    getAllSpecimens, 
+    deleteSpecimenById, 
+    loading 
+  } = useDB()
   const { specimens } = useStore(useVegetationStore)
 
   useEffect(() => {
@@ -58,6 +62,7 @@ const VegetationListScreen = ({navigation}) => {
           trunk_diameter={item.trunk_diameter}
           cup_diameter={item.cup_diameter}
           onPress={() => {navigation.navigate('VegetationDetail', {id: item.id})}}
+          onDeleteItem={() => deleteSpecimenById(item.id)}
         />)}
         keyExtractor={item => item.id}
         onScroll={onScroll}
@@ -72,7 +77,7 @@ const VegetationListScreen = ({navigation}) => {
 					animateFrom={'right'}
 					iconMode={'dynamic'}
 					style={styles.fabStyle}
-				/>
+			/>
 		</SafeAreaView>
 	)
 }
