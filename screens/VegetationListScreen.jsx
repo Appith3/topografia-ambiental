@@ -4,42 +4,10 @@ import { StyleSheet, SafeAreaView, FlatList, View } from 'react-native'
 import { ActivityIndicator, AnimatedFAB, Avatar, List, Text } from 'react-native-paper'
 import { useStore } from 'zustand';
 
-import { useVegetationStore } from '../store/useVegetationStore';
 import Topbar from '../components/Topbar'
+import VegetationItem from '../components/VegetationItem';
 import useDB from '../Hooks/useDB'
-
-const VegetationItem = ({id, classification, height, trunkDiameter , cupDiameter }) => (
-  <List.Item
-    left={() => <Avatar.Text label={id} labelStyle={{fontSize: 18}}/>}
-    style={styles.item}
-    title={classification}
-    description={() => (
-      <View style={styles.itemDescription}>
-        <View style={{flexDirection: 'row'}}>
-          <Text>{height} m</Text>
-          <List.Icon icon="ruler" />
-        </View>
-        {
-          trunkDiameter
-            ? <View style={{flexDirection: 'row'}}>
-                <Text>{trunkDiameter} cm</Text>
-                <List.Icon icon="tree" />
-              </View>
-            : null
-        }
-        {
-          cupDiameter
-            ? <View style={{flexDirection: 'row'}}>
-                <Text>{cupDiameter} m</Text>
-                <List.Icon icon="grass" />
-              </View>
-            : null
-        }
-      </View>
-    )}
-    titleStyle={{fontSize: 24}}
-  />
-)
+import { useVegetationStore } from '../store/useVegetationStore';
 
 const VegetationListScreen = ({navigation}) => {
   const [isExtended, setIsExtended] = useState(true);
@@ -49,16 +17,10 @@ const VegetationListScreen = ({navigation}) => {
   const { specimens } = useStore(useVegetationStore);
 
   // FIXME: prevent re-render, useEffect is executing until specimens.length not change
-  const memoizedGetAllSpecimens = useMemo(() => async () => {
-    getAllSpecimens()
-
-    return specimensData;
-  }, []);
   
   useEffect(() => {
-    console.log('specimens: ', specimens);
-    memoizedGetAllSpecimens()
-  }, [specimens.length])
+    getAllSpecimens()
+  }, [])
 
   const onScroll = ({ nativeEvent }) => {
 		const currentScrollPosition =
@@ -128,17 +90,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
-  },
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    borderRadius: 8
-  },
-  itemDescription: {
-    flexDirection: 'row',
-    gap: 8
   },
   fabStyle: {
 		bottom: 16,
