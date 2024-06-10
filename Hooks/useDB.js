@@ -27,7 +27,7 @@ const useDB = () => {
 	}
 		
 	const createSpecimen = async (specimen) => {
-		const {id, classification, height, trunkDiameter, cupDiameter} = specimen
+		const {id, classification, height, trunk_diameter, cup_diameter} = specimen
 
 		const insertSpecimenStmt = await db.prepareAsync(
 			'INSERT INTO Specimens (id, classification, height) VALUES ($id, $classification, $height);'
@@ -40,9 +40,9 @@ const useDB = () => {
 		try {
 			await insertSpecimenStmt.executeAsync({$id: id, $classification: classification, $height: height})
 
-			if(trunkDiameter || cupDiameter) {
+			if(trunk_diameter || cup_diameter) {
 				try{
-					await insertSpecimenDetailStmt.executeAsync({$id_specimen: id, $trunk_diameter: trunkDiameter, $cup_diameter: cupDiameter})
+					await insertSpecimenDetailStmt.executeAsync({$id_specimen: id, $trunk_diameter: trunk_diameter, $cup_diameter: cup_diameter})
 				} finally {
 					await insertSpecimenDetailStmt.finalizeAsync()
 				}

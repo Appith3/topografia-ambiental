@@ -55,8 +55,8 @@ const VegetationListScreen = ({navigation}) => {
           id={item.id}
           classification={item.classification} 
           height={item.height}
-          trunkDiameter={item.trunk_diameter}
-          cupDiameter={item.cup_diameter}
+          trunk_diameter={item.trunk_diameter}
+          cup_diameter={item.cup_diameter}
         />)}
         keyExtractor={item => item.id}
         onScroll={onScroll}

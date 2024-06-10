@@ -16,8 +16,8 @@ const VegetationFormScreen = ({navigation}) => {
 		id: '',
 		classification: '',
 		height: '',
-		trunkDiameter: '',
-		cupDiameter: ''
+		trunk_diameter: '',
+		cup_diameter: ''
 	})
 
 	const clearForm = () => {
@@ -25,8 +25,8 @@ const VegetationFormScreen = ({navigation}) => {
 			id: '',
 			classification: '',
 			height: '',
-			trunkDiameter: '',
-			cupDiameter: ''
+			trunk_diameter: '',
+			cup_diameter: ''
 		})
 	}
 
@@ -87,19 +87,19 @@ const VegetationFormScreen = ({navigation}) => {
 				/>
 				<TextInput
 					label="Diámetro del tronco"
-					value={specimen.trunkDiameter}
-					onChangeText={trunkDiameter => setSpecimen({
+					value={specimen.trunk_diameter}
+					onChangeText={trunk_diameter => setSpecimen({
 						...specimen,
-						trunkDiameter
+						trunk_diameter
 					})}
 					keyboardType='numeric'
 				/>
 				<TextInput
 					label="Diámetro de la copa"
-					value={specimen.cupDiameter}
-					onChangeText={cupDiameter => setSpecimen({
+					value={specimen.cup_diameter}
+					onChangeText={cup_diameter => setSpecimen({
 						...specimen,
-						cupDiameter
+						cup_diameter
 					})}
 					keyboardType='numeric'
 					/>

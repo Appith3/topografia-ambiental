@@ -2,7 +2,7 @@ import { View, StyleSheet } from 'react-native'
 import React from 'react'
 import { Avatar, List, Text } from 'react-native-paper'
 
-const VegetationItem = ({id, classification, height, trunkDiameter , cupDiameter }) => (
+const VegetationItem = ({id, classification, height, trunk_diameter , cup_diameter }) => (
   <List.Item
     left={() => <Avatar.Text label={id} labelStyle={{fontSize: 18}}/>}
     style={styles.item}
@@ -14,17 +14,17 @@ const VegetationItem = ({id, classification, height, trunkDiameter , cupDiameter
           <List.Icon icon="ruler" />
         </View>
         {
-          trunkDiameter
+          trunk_diameter
             ? <View style={{flexDirection: 'row'}}>
-                <Text>{trunkDiameter} cm</Text>
+                <Text>{trunk_diameter} cm</Text>
                 <List.Icon icon="tree" />
               </View>
             : null
         }
         {
-          cupDiameter
+          cup_diameter
             ? <View style={{flexDirection: 'row'}}>
-                <Text>{cupDiameter} m</Text>
+                <Text>{cup_diameter} m</Text>
                 <List.Icon icon="grass" />
               </View>
             : null
