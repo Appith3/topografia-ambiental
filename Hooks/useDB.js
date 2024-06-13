@@ -17,12 +17,12 @@ const useDB = () => {
 				id TEXT PRIMARY KEY,
 				classification TEXT,
 				height REAL
-			)
+			);
 			CREATE TABLE IF NOT EXISTS Specimens_Detail (
 				id_specimen TEXT PRIMARY KEY REFERENCES Specimens(id),
 				trunk_diameter REAL,
 				cup_diameter REAL
-			)
+			);
 		`)
 	}
 		
@@ -30,11 +30,11 @@ const useDB = () => {
 		const {id, classification, height, trunk_diameter, cup_diameter} = specimen
 
 		const insertSpecimenStmt = await db.prepareAsync(
-			'INSERT INTO Specimens (id, classification, height) VALUES ($id, $classification, $height)'
+			'INSERT INTO Specimens (id, classification, height) VALUES ($id, $classification, $height);'
 		)
 
 		const insertSpecimenDetailStmt = await db.prepareAsync(
-			'INSERT INTO Specimens_Detail (id_specimen, trunk_diameter, cup_diameter) VALUES ($id_specimen, $trunk_diameter, $cup_diameter)'
+			'INSERT INTO Specimens_Detail (id_specimen, trunk_diameter, cup_diameter) VALUES ($id_specimen, $trunk_diameter, $cup_diameter);'
 		)
 
 		try {
@@ -64,7 +64,7 @@ const useDB = () => {
 
 	const getAllSpecimens = async () => {
 		const getSpecimensStmt = await db.prepareAsync(
-			'SELECT * FROM Specimens s LEFT JOIN Specimens_Detail sd ON s.id = sd.id_specimen'
+			'SELECT * FROM Specimens s LEFT JOIN Specimens_Detail sd ON s.id = sd.id_specimen;'
 		)
 
 		try {
@@ -87,7 +87,7 @@ const useDB = () => {
 
 	const getSpecimenById = async (specimenId) => {
 		const getByIdStmt = await db.prepareAsync(
-			'SELECT * FROM Specimens s LEFT JOIN Specimens_Detail sd ON s.id = sd.id_specimen WHERE s.id = $specimenId'
+			'SELECT * FROM Specimens s LEFT JOIN Specimens_Detail sd ON s.id = sd.id_specimen WHERE s.id = $specimenId;'
 		)
 	
 		try {
@@ -117,7 +117,7 @@ const useDB = () => {
 
 	const updateSpecimenClassification = async (specimenId, newClassification) => {
 		const updateStmt = await db.prepareAsync(
-			'UPDATE Specimens SET classification = $newClassification WHERE id = $specimenId'
+			'UPDATE Specimens SET classification = $newClassification WHERE id = $specimenId;'
 		)
 	
 		try {
@@ -131,7 +131,7 @@ const useDB = () => {
 
 	const updateSpecimenHeight = async (specimenId, newHeight) => {
 		const updateStmt = await db.prepareAsync(
-			'UPDATE Specimens SET height = $newHeight WHERE id = $specimenId'
+			'UPDATE Specimens SET height = $newHeight WHERE id = $specimenId;'
 		)
 	
 		try {
@@ -147,7 +147,7 @@ const useDB = () => {
 		if (!newTrunkDiameter) return // No update if new value is null/undefined
 	
 		const updateStmt = await db.prepareAsync(
-			'UPDATE Specimens_Detail SET trunk_diameter = $newTrunkDiameter WHERE id_specimen = $specimenId'
+			'UPDATE Specimens_Detail SET trunk_diameter = $newTrunkDiameter WHERE id_specimen = $specimenId;'
 		)
 	
 		try {
@@ -163,7 +163,7 @@ const useDB = () => {
 		if (!newCupDiameter) return // No update if new value is null/undefined
 	
 		const updateStmt = await db.prepareAsync(
-			'UPDATE Specimens_Detail SET cup_diameter = $newCupDiameter WHERE id_specimen = $specimenId'
+			'UPDATE Specimens_Detail SET cup_diameter = $newCupDiameter WHERE id_specimen = $specimenId;'
 		)
 	
 		try {
