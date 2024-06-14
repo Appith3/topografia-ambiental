@@ -23,11 +23,15 @@ const useDB = () => {
 				trunk_diameter REAL,
 				cup_diameter REAL
 			);
+			CREATE TABLE IF NOT EXISTS Specimens_Note (
+				id_specimen TEXT PRIMARY KEY REFERENCES Specimens(id),
+				note TEXT
+			);
 		`)
 	}
 		
 	const createSpecimen = async (specimen) => {
-		const {id, classification, height, trunk_diameter, cup_diameter} = specimen
+		const {id, classification, height, note, trunk_diameter, cup_diameter} = specimen
 
 		const insertSpecimenStmt = await db.prepareAsync(
 			'INSERT INTO Specimens (id, classification, height) VALUES ($id, $classification, $height);'
@@ -37,19 +41,36 @@ const useDB = () => {
 			'INSERT INTO Specimens_Detail (id_specimen, trunk_diameter, cup_diameter) VALUES ($id_specimen, $trunk_diameter, $cup_diameter);'
 		)
 
+		const insertSpecimenNoteStmt = await db.prepareAsync(
+			'INSERT INTO Specimens_Note (id_specimen, note) VALUES ($id_specimen, $note);'
+		)
+
 		try {
+			setLoading(true) 
+
 			await insertSpecimenStmt.executeAsync({$id: id, $classification: classification, $height: height})
+
+			if(note) {
+				try {
+					await insertSpecimenNoteStmt.executeAsync({$id_specimen: id, $note: note})
+				} catch(error) {
+					console.error('error: ', error)
+				} finally {
+					await insertSpecimenNoteStmt.finalizeAsync()
+				}
+			}
 
 			if(trunk_diameter || cup_diameter) {
 				try{
 					await insertSpecimenDetailStmt.executeAsync({$id_specimen: id, $trunk_diameter: trunk_diameter, $cup_diameter: cup_diameter})
+				} catch(error) {
+					console.error('error: ', error)
 				} finally {
 					await insertSpecimenDetailStmt.finalizeAsync()
 				}
 			}
 
-			addSpecimen(specimen)
-
+			setLoading(false)
 		} catch (error) {
 			if (error.message.includes('database is locked')) {
         console.error("Database locked")
@@ -68,7 +89,7 @@ const useDB = () => {
 		)
 
 		try {
-			setLoading(true) 
+			setLoading(true)
 	
 			const result = await getSpecimensStmt.executeAsync()
 			const allRows = await result.getAllAsync()
@@ -77,7 +98,7 @@ const useDB = () => {
 				addSpecimen(specimen)
 			}
 	
-			setLoading(false) 
+			setLoading(false)
 		} catch (error) {
 			console.error('Error fetching specimens:', error) 
 		} finally {
@@ -87,7 +108,7 @@ const useDB = () => {
 
 	const getSpecimenById = async (specimenId) => {
 		const getByIdStmt = await db.prepareAsync(
-			'SELECT * FROM Specimens s LEFT JOIN Specimens_Detail sd ON s.id = sd.id_specimen WHERE s.id = $specimenId;'
+			'SELECT * FROM Specimens s LEFT JOIN Specimens_Detail sd ON s.id = sd.id_specimen LEFT JOIN Specimens_Note sn ON sn.id_specimen = s.id WHERE s.id = $specimenId;'
 		)
 	
 		try {
@@ -104,12 +125,13 @@ const useDB = () => {
 				height: specimenRow.height,
 				trunk_diameter: specimenRow.trunk_diameter || null,
 				cup_diameter: specimenRow.cup_diameter || null,
-				}
+				note: specimenRow.note || '',
+			}
 	
 			return specimenData
 		} catch (error) {
 			console.error('Error getting specimen by ID:', error)
-			return null
+			return null;
 		} finally {
 			await getByIdStmt.finalizeAsync()
 		}
@@ -175,6 +197,22 @@ const useDB = () => {
 		}
 	}
 
+	const updateSpecimenNote = async (specimenId, newNote) => {
+		if(!newNote) return
+
+		const updateStmt = await db.prepareAsync(
+			'UPDATE Specimens_Note SET note = $newNote WHERE id_specimen = $specimenId;'
+		)
+	
+		try {
+			await updateStmt.executeAsync({ $specimenId: specimenId, $newNote: newNote })
+		} catch (error) {
+			console.error('Error updating specimen height:', error)
+		} finally {
+			await updateStmt.finalizeAsync()
+		}
+	}
+
 	useEffect(() => {
 		initDB()
 	}, [])
@@ -185,6 +223,7 @@ const useDB = () => {
 		getSpecimenById,
 		updateSpecimenClassification,
 		updateSpecimenHeight,
+		updateSpecimenNote,
 		updateSpecimenTrunkDiameter,
 		updateSpecimenCupDiameter,
 		loading
