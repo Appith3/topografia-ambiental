@@ -31,6 +31,29 @@ const VegetationListScreen = ({navigation}) => {
 		setIsExtended(currentScrollPosition <= 0)
 	}
 
+  const renderItem = ({item}) => (
+    <VegetationItem 
+      id={item.id}
+      classification={item.classification} 
+      height={item.height}
+      trunk_diameter={item.trunk_diameter}
+      cup_diameter={item.cup_diameter}
+      onPress={() => {navigation.navigate('VegetationDetail', {id: item.id})}}
+    />
+  )
+
+  const emptyState = () => (
+    <Text 
+      variant='displaySmall'
+      style={{
+        textAlign: 'center', 
+        alignSelf:'center'
+      }}
+    >
+      No hay ejemplares que mostrar
+    </Text>
+  )
+
   if (loading) {
 		return (
 			<View style={styles.loadingContainer}>
@@ -54,20 +77,12 @@ const VegetationListScreen = ({navigation}) => {
       />
       <FlatList
         data={specimens}
-        renderItem={({item}) => (
-        <VegetationItem 
-          id={item.id}
-          classification={item.classification} 
-          height={item.height}
-          trunk_diameter={item.trunk_diameter}
-          cup_diameter={item.cup_diameter}
-          onPress={() => {navigation.navigate('VegetationDetail', {id: item.id})}}
-          onDeleteItem={() => deleteSpecimenById(item.id)}
-        />)}
+        renderItem={renderItem}
         keyExtractor={item => item.id}
         onScroll={onScroll}
         refreshing={refreshing}
         onRefresh={getAllSpecimens}
+        ListEmptyComponent={emptyState}
       />
       <AnimatedFAB
 					icon={'plus'}
