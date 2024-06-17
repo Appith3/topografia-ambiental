@@ -13,7 +13,11 @@ const VegetationListScreen = ({navigation}) => {
   const [isExtended, setIsExtended] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
 
-  const { getAllSpecimens, loading } = useDB()
+  const { 
+    getAllSpecimens, 
+    deleteSpecimenById, 
+    loading 
+  } = useDB()
   const { specimens } = useStore(useVegetationStore)
 
   useEffect(() => {
@@ -88,7 +92,7 @@ const VegetationListScreen = ({navigation}) => {
 					animateFrom={'right'}
 					iconMode={'dynamic'}
 					style={styles.fabStyle}
-				/>
+			/>
 		</SafeAreaView>
 	)
 }
