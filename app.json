@@ -18,10 +18,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.appithe.topografiaambiental"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "8faa1f93-8679-40b4-8c18-eb33b6fc7e40"
+      }
+    },
+    "owner": "appithe"
   }
 }

@@ -21,12 +21,14 @@ const VegetationDetailScreen = ( props ) => {
 		updateSpecimenClassification,
 		updateSpecimenHeight,
 		updateSpecimenTrunkDiameter,
-		updateSpecimenCupDiameter
+		updateSpecimenCupDiameter,
+		updateSpecimenNote
 	} = useDB()
 
 	const [specimen, setSpecimen] = useState({
 		classification: '',
 		height: '',
+		note: '',
 		trunk_diameter: '',
 		cup_diameter: ''
 	})
@@ -44,7 +46,11 @@ const VegetationDetailScreen = ( props ) => {
 
 	const handleEditPress = async () => {
     await updateSpecimenClassification(id, specimen.classification)
-    await updateSpecimenHeight(id, parseFloat(specimen.height)) 
+    await updateSpecimenHeight(id, parseFloat(specimen.height))
+		if (specimen.note !== '') {
+			await updateSpecimenNote(id, specimen.note)
+		}
+
     if (specimen.trunk_diameter !== '') { 
       await updateSpecimenTrunkDiameter(id, parseFloat(specimen.trunk_diameter))
     }
@@ -124,6 +130,15 @@ const VegetationDetailScreen = ( props ) => {
 						trunk_diameter
 					})}
 					keyboardType='numeric'
+				/>
+				<TextInput
+					label="Notas"
+					value={specimen.note}
+					onChangeText={note => setSpecimen({
+						...specimen,
+						note
+					})}
+					multiline
 				/>
 
 				<View style={styles.formControls}>

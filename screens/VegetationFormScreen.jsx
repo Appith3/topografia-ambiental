@@ -1,17 +1,20 @@
 import { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
-import { Button, TextInput } from 'react-native-paper'
+import { Button, Snackbar, TextInput } from 'react-native-paper'
+import { useStore } from 'zustand'
 
 import Topbar from '../components/Topbar'
 import InputSelect from '../components/InputSelect'
 
- import usePlantIdGenerator from '../Hooks/usePlantIdGenerator'
+import { useVegetationStore } from '../store/useVegetationStore'
+//// import usePlantIdGenerator from '../Hooks/usePlantIdGenerator'
 import useDB from '../Hooks/useDB'
 
 const VegetationFormScreen = ({navigation}) => {
-	 const { generatePlantId } = usePlantIdGenerator()
-	const { createSpecimen } = useDB()
+	//// const { generatePlantId } = usePlantIdGenerator()
+	const { createSpecimen, loading } = useDB()
+	const { addSpecimen } = useStore(useVegetationStore)
 
 	const [specimen, setSpecimen] = useState({
 		id: '',
@@ -21,11 +24,18 @@ const VegetationFormScreen = ({navigation}) => {
 		cup_diameter: ''
 	})
 
+	const [visible, setVisible] = useState(false)
+
+  const onToggleSnackBar = () => setVisible(!visible)
+
+  const onDismissSnackBar = () => setVisible(false)
+
 	const clearForm = () => {
 		setSpecimen({
 			id: '',
 			classification: '',
 			height: '',
+			note: '',
 			trunk_diameter: '',
 			cup_diameter: ''
 		})
@@ -33,13 +43,27 @@ const VegetationFormScreen = ({navigation}) => {
 
 	const handleSavePress = () => {
 		createSpecimen(specimen)
-		clearForm()
+    .then(() => {
+			addSpecimen(specimen)
+			onToggleSnackBar()
+    })
+    clearForm()
 	}
 
 	return (
 		<View style={styles.container}>
 			<Topbar title='Agregar ejemplar' whitBackAction onBack={() => {navigation.goBack()}}/>
 			<View style={styles.form}>
+				<Snackbar
+					visible={visible}
+					onDismiss={onDismissSnackBar}
+					action={{
+						label: 'cerrar',
+						onPress: onToggleSnackBar,
+					}}>
+					Ejemplar creado correctamente 👍
+				</Snackbar>
+
 				<TextInput
 					label="ID de colectora"
 					value={specimen.id}
@@ -113,9 +137,18 @@ const VegetationFormScreen = ({navigation}) => {
 					})}
 					keyboardType='numeric'
 				/>
+				<TextInput
+					label="Notas"
+					value={specimen.note}
+					onChangeText={note => setSpecimen({
+						...specimen,
+						note
+					})}
+					multiline
+				/>
 
 				<View style={styles.formControls}>
-					<Button mode='contained' onPress={handleSavePress}>
+					<Button mode='contained' onPress={handleSavePress} loading={loading}>
 						Guardar ejemplar
 					</Button>
 				</View>

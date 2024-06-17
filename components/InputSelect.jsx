@@ -12,7 +12,7 @@ const InputSelect = ( props ) => {
 
 	return (
 		<View style={styles.inputSelect}>
-			<Text variant='bodyLarge'>{label}</Text>
+			{label ? <Text variant='bodyLarge'>{label}</Text> : null}
 			<Picker
 				selectedValue={selectedValue}
 				onValueChange={onValueChange}
