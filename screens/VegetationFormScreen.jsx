@@ -102,11 +102,11 @@ const VegetationFormScreen = ({navigation}) => {
 					]}
 					selectedValue={specimen.classification}
 					onValueChange={(classification) => {
-						//// let id = generatePlantId(classification)
+						 let id = generatePlantId(classification)
 						setSpecimen({
 							...specimen,
 							classification,
-							//// id: id._j
+							 id: id._j
 						})
 					}}
 				/>

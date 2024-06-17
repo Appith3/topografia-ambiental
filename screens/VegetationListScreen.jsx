@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, SafeAreaView, FlatList, View } from 'react-native'
-import { ActivityIndicator, AnimatedFAB } from 'react-native-paper'
+import { ActivityIndicator, AnimatedFAB, Text } from 'react-native-paper'
 import { useStore } from 'zustand'
 
 import Topbar from '../components/Topbar'
@@ -13,7 +13,11 @@ const VegetationListScreen = ({navigation}) => {
   const [isExtended, setIsExtended] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
 
-  const { getAllSpecimens, loading } = useDB()
+  const { 
+    getAllSpecimens, 
+    deleteSpecimenById, 
+    loading 
+  } = useDB()
   const { specimens } = useStore(useVegetationStore)
 
   useEffect(() => {
@@ -26,6 +30,29 @@ const VegetationListScreen = ({navigation}) => {
 
 		setIsExtended(currentScrollPosition <= 0)
 	}
+
+  const renderItem = ({item}) => (
+    <VegetationItem 
+      id={item.id}
+      classification={item.classification} 
+      height={item.height}
+      trunk_diameter={item.trunk_diameter}
+      cup_diameter={item.cup_diameter}
+      onPress={() => {navigation.navigate('VegetationDetail', {id: item.id})}}
+    />
+  )
+
+  const emptyState = () => (
+    <Text 
+      variant='displaySmall'
+      style={{
+        textAlign: 'center', 
+        alignSelf:'center'
+      }}
+    >
+      No hay ejemplares que mostrar
+    </Text>
+  )
 
   if (loading) {
 		return (
@@ -50,19 +77,12 @@ const VegetationListScreen = ({navigation}) => {
       />
       <FlatList
         data={specimens}
-        renderItem={({item}) => (
-        <VegetationItem 
-          id={item.id}
-          classification={item.classification} 
-          height={item.height}
-          trunk_diameter={item.trunk_diameter}
-          cup_diameter={item.cup_diameter}
-          onPress={() => {navigation.navigate('VegetationDetail', {id: item.id})}}
-        />)}
+        renderItem={renderItem}
         keyExtractor={item => item.id}
         onScroll={onScroll}
         refreshing={refreshing}
         onRefresh={getAllSpecimens}
+        ListEmptyComponent={emptyState}
       />
       <AnimatedFAB
 					icon={'plus'}
@@ -72,7 +92,7 @@ const VegetationListScreen = ({navigation}) => {
 					animateFrom={'right'}
 					iconMode={'dynamic'}
 					style={styles.fabStyle}
-				/>
+			/>
 		</SafeAreaView>
 	)
 }

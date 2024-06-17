@@ -9,7 +9,7 @@ const useDB = () => {
 
 	const db = useSQLiteContext()
 
-	const { addSpecimen } = useStore(useVegetationStore)
+	const { addSpecimen, deleteSpecimen } = useStore(useVegetationStore)
 
 	const initDB = async () => {
 		await db.execAsync(`
@@ -212,6 +212,22 @@ const useDB = () => {
 			await updateStmt.finalizeAsync()
 		}
 	}
+  
+  const deleteSpecimenById = async (specimenId) => {
+		const deleteStmt = await db.prepareAsync(
+			'DELETE FROM Specimens WHERE id = $specimenId'
+		)
+	
+		try {
+			await deleteStmt.executeAsync({ $specimenId: specimenId })
+			deleteSpecimen(specimenId)
+			console.log(`Specimen with ID ${specimenId} deleted successfully`)
+		} catch (error) {
+			console.error('Error deleting specimen:', error)
+		} finally {
+			await deleteStmt.finalizeAsync()
+    }
+  }
 
 	useEffect(() => {
 		initDB()
@@ -226,6 +242,7 @@ const useDB = () => {
 		updateSpecimenNote,
 		updateSpecimenTrunkDiameter,
 		updateSpecimenCupDiameter,
+		deleteSpecimenById,
 		loading
 	}
 }
