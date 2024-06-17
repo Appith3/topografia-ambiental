@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, SafeAreaView, FlatList, View } from 'react-native'
-import { ActivityIndicator, AnimatedFAB } from 'react-native-paper'
+import { ActivityIndicator, AnimatedFAB, Text } from 'react-native-paper'
 import { useStore } from 'zustand'
 
 import Topbar from '../components/Topbar'
