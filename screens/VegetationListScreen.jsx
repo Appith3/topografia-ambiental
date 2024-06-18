@@ -15,7 +15,6 @@ const VegetationListScreen = ({navigation}) => {
 
   const { 
     getAllSpecimens, 
-    deleteSpecimenById, 
     loading 
   } = useDB()
   const { specimens } = useStore(useVegetationStore)
@@ -66,14 +65,14 @@ const VegetationListScreen = ({navigation}) => {
 		<SafeAreaView style={styles.container}>
       <Topbar 
         title='Lista de ejemplares'
-        // // whitActions={
-        // //   [
-        // //     {
-        // //       icon: 'export-variant',
-        // //       onPress: () => { console.info('export data') },
-        // //     }
-        // //   ]
-        // // }
+        whitActions={
+          [
+            {
+              icon: 'export-variant',
+              onPress: () => { console.log(specimens) },
+            }
+          ]
+        }
       />
       <FlatList
         data={specimens}
