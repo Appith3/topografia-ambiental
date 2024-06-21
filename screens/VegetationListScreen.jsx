@@ -12,6 +12,7 @@ import { useVegetationStore } from '../store/useVegetationStore'
 const VegetationListScreen = ({navigation}) => {
   const [isExtended, setIsExtended] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const { 
     getAllSpecimens, 
@@ -29,6 +30,52 @@ const VegetationListScreen = ({navigation}) => {
 
 		setIsExtended(currentScrollPosition <= 0)
 	}
+
+  const downloadFile = async () => {
+    setIsLoading(true);
+    console.log('DOWNLOAD')
+		let apiUrl = `https://api-libreta-topografica.onrender.com/api/download-vegetation-file/`;
+
+		try {
+			const result = await FileSystem.downloadAsync(
+				apiUrl,
+				`${FileSystem.documentDirectory}/vegetacion.xlsx`
+			);
+				
+			if (result.status !== 200) {
+				setIsLoading(false);
+				return;
+			} else {
+				saveFile(result.uri);
+			}
+		} catch (error) {
+			setIsLoading(false);
+		}
+  }
+
+  const handlerPressExportFile = async () => {
+    setIsLoading(true);
+    console.log('specimens: ', specimens);
+  
+    try {
+      const createResponse = await fetch(`https://api-libreta-topografica.onrender.com/api/create-vegetation-file`, {
+        method: 'POST',
+        body: specimens,
+      });
+  
+      if (!createResponse.ok) {
+        console.error('Error creating file:', createResponse.statusText);
+        setIsLoading(false);
+        return; // Exit if file creation fails
+      }
+  
+      await downloadFile(); // Download the created file
+    } catch (error) {
+      console.error('Error exporting file:', error);
+      setIsLoading(false);
+    }
+  };
+  
 
   const renderItem = ({item}) => (
     <VegetationItem 
@@ -69,7 +116,7 @@ const VegetationListScreen = ({navigation}) => {
           [
             {
               icon: 'export-variant',
-              onPress: () => { console.log(specimens) },
+              onPress: () => { handlerPressExportFile() },
             }
           ]
         }
